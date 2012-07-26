@@ -8,13 +8,14 @@ This module aims at providing an object-oriented, [promises](http://wiki.commonj
 The goal is to be able to chain methods and getters this way:
 
 	var wd = require('wd'),
-		elements = require('wd-element'),
+		element = require('wd-element'),
 		assert = require('assert');
 
-	wd.get('http://duckduckgo.com', function(err) {	// only callback we'll have to write, since this is in wd
-		if (err) throw err;
+	// actual added value by this library
+	function navigate(remoteBrowser) {
+		element.use(remoteBrowser);
 
-		element.findByName('q'))
+		element.findByName('q')
 			   .then(element.fill('Toto'))
 			   .then(element.click)
 			   .then(element.findById('zero_click_heading'))
@@ -22,4 +23,17 @@ The goal is to be able to chain methods and getters this way:
 			   .then(function(matches) {
 			   		assert(matches);
 			   	}).end();	// needed if we want to throw any exception found along the way instead of writing a specific catcher for it
+	}
+
+	// from here on, it's standard wd usage
+	var browser = wd.remote();
+
+	browser.init({ 'browserName': 'chrome' }, function(err) {
+		if (err) throw err;
+
+		wd.get('http://duckduckgo.com', function(err) {	// only callback we'll have to write, since this is in wd
+			if (err) throw err;
+
+			navigate(browser);
+		});
 	});
