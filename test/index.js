@@ -51,7 +51,7 @@ describe('Element', function() {
 	});
 
 	it('should wrap an element in a promise', function(done) {
-		element.get(subjectSearchBar)
+		element.wrap(subjectSearchBar)
 				.then(function(elm) {
 					elm.should.equal(subjectSearchBar);
 					done();
@@ -67,18 +67,14 @@ describe('Element', function() {
 			}, done);
 		});
 
-		xit('should provide a getter for values', function(done) {
-			element.get(subjectSearchBar)
-				   .then(element.getValue)
+		it('should provide a getter for values', function(done) {
+			element.wrap(subjectSearchBar)
+				   .then(element.get('value'))
 				   .then(function(val) {
-						val.should.strictEqual('');
+						should(val === '');
 						done();
 				   }, done);
 		});
-	});
-
-	describe('element manipulation', function() {
-		xit('should ')
 	});
 });
 
