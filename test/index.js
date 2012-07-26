@@ -73,7 +73,7 @@ describe('Element', function() {
 			element.wrap(subjectSearchBar)
 				   .then(element.get('value'))
 				   .then(function(val) {
-						should(val === '');
+						should.strictEqual(val, '');
 						done();
 				   }, done).end();
 		});
@@ -88,7 +88,7 @@ describe('Element', function() {
 				   .then(element.type(TYPED))
 				   .then(element.get('value'))
 				   .then(function(val) {
-						should(val === TYPED);
+						should.strictEqual(val, TYPED);
 						done();
 				   }, done).end();
 		});
@@ -98,7 +98,7 @@ describe('Element', function() {
 				   .then(element.type(TYPED_2))
 				   .then(element.get('value'))
 				   .then(function(val) {
-						should(val === (TYPED + TYPED_2));
+						should.strictEqual(val, TYPED + TYPED_2);
 						done();
 				   }, done).end();
 		});
@@ -108,7 +108,7 @@ describe('Element', function() {
 				   .then(element.clear())
 				   .then(element.get('value'))
 				   .then(function(val) {
-						should(val === '');
+						should.strictEqual(val, '');
 						done();
 				   }, done).end();
 		});
