@@ -54,11 +54,24 @@ module.exports = new Class( /** @lends Element */ {
 		args = Array.from(args);
 		var browser = this.browser;
 
+		var deferred = promises.defer();
+
 		return function(elm) {
 			args.unshift(elm);
-			args.unshift(browser);
-			args.unshift(browser[method]);
-			return promises.ncall.apply(promises, args);	// == promises.ncall(browser[method], browser, elm, arg, …)
+			args.push(function(error, value) {
+				if (error)
+					deferred.reject(error);
+				else if (arguments.length == 2)
+					deferred.resolve(value);
+				else if (arguments.length > 2)
+					deferred.resolve(Array.prototype.slice.call(arguments, 1));	// pass an array of values
+				else
+					deferred.resolve(elm);	// keep the chain going
+			});
+
+			browser[method].apply(browser, args);
+
+			return deferred.promise;
 		}
 	},
 
@@ -87,5 +100,21 @@ module.exports = new Class( /** @lends Element */ {
 	*/
 	getText: function getText() {
 		return this.makePromise('getText');
+	},
+
+	/** Sets the contents of a field passed through a promise chain to the given value.
+	*@param	{String}	input	The value to set the field to.
+	*/
+	input: function input(input) {
+		return	this.makePromise('clear')
+					.then(this.type(input));
+	},
+
+	/** Sends the given keystrokes sequence to an element passed through a promise chain.
+	*@param	{String}	input	The sequence of keystrokes to send.
+	*@see	#input	If you want to set the contents of a field, rather use `input()`, that will clear the contents beforehand.
+	*/
+	type: function type(input) {
+		return this.makePromise('type', input);
 	}
 });

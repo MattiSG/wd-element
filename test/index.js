@@ -3,6 +3,8 @@ var Element = require('../src/Element'),
 	should = require('should'),
 	webdriver = require('wd');
 
+var URL = 'http://google.com';
+
 var browser,
 	subjectSearchBar;
 
@@ -21,7 +23,7 @@ describe('Setup', function() {
 	it('should load a page', function(done) {
 		this.timeout(15 * 1000);	// page load can be slow
 
-		browser.get('http://google.com', done);
+		browser.get(URL, done);
 	});
 
 	it('should find a specific element', function(done) {
@@ -58,7 +60,7 @@ describe('Element', function() {
 				}, done);
 	});
 
-	describe('element finding', function() {
+	describe('retrieval', function() {
 		it('should find the same element as the wd API', function(done) {
 			element.findBy('name', 'q').then(function(elm) {
 				elm.value.should.equal(subjectSearchBar.value);	// can't directly call equal on elm?!
@@ -75,6 +77,20 @@ describe('Element', function() {
 						done();
 				   }, done);
 		});
+	});
+
+	describe('manipulation', function() {
+		var TYPED = 'Toto';
+
+		it('should input a value in a field', function(done) {
+			element.wrap(subjectSearchBar)
+				   .then(element.type(TYPED))
+				   .then(element.get('value'))
+				   .then(function(val) {
+						should(val === TYPED);
+						done();
+				   }, done);
+		})
 	});
 });
 
