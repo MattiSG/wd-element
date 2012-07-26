@@ -34,20 +34,31 @@ describe('Setup', function() {
 });
 
 describe('Static API', function() {
+	it('should throw when trying to access methods without driver binding', function() {
+		element.findBy.bind(element, 'name', 'q').should.throw();
+	});
+
 	it('should be bound to a specific driver', function() {
 		element.use(browser);
 	});
 
 	it('should create a promise for an element', function() {
-		promises.isPromise(element.findByName('q')).should.be.ok;
+		promises.isPromise(element.findBy('name', 'q')).should.be.ok;
 	});
 
 	describe('element finding', function() {
 		it('should find the same element as the wd API', function(done) {
-			element.findByName('q').then(function(elm) {
-				elm.should.equal(subjectSearchBar);
+			element.findBy('name', 'q').then(function(elm) {
+				elm.value.should.equal(subjectSearchBar.value);	// can't directly call equal on elm?!
+				elm.browser.should.equal(subjectSearchBar.browser);
 				done();
 			}, done);
 		});
+	});
+});
+
+describe('Teardown', function() {
+	it('should kill the driver', function(done) {
+		browser.quit(done);
 	});
 });
