@@ -1,4 +1,4 @@
-var element = require('../src/Element'),
+var Element = require('../src/Element'),
 	promises = require('q'),
 	should = require('should'),
 	webdriver = require('wd');
@@ -33,17 +33,29 @@ describe('Setup', function() {
 	});
 });
 
-describe('Static API', function() {
-	it('should throw when trying to access methods without driver binding', function() {
-		element.findBy.bind(element, 'name', 'q').should.throw();
+describe('Element', function() {
+	var element;
+
+	it('should throw when trying to construct without passing a driver', function() {
+		(function() {
+			new Element();
+		}).should.throw();
 	});
 
-	it('should be bound to a specific driver', function() {
-		element.use(browser);
+	it('should not throw when trying to construct with a driver', function() {
+		element = new Element(browser);
 	});
 
 	it('should create a promise for an element', function() {
 		promises.isPromise(element.findBy('name', 'q')).should.be.ok;
+	});
+
+	it('should wrap an element in a promise', function(done) {
+		element.get(subjectSearchBar)
+				.then(function(elm) {
+					elm.should.equal(subjectSearchBar);
+					done();
+				}, done);
 	});
 
 	describe('element finding', function() {
@@ -54,6 +66,19 @@ describe('Static API', function() {
 				done();
 			}, done);
 		});
+
+		xit('should provide a getter for values', function(done) {
+			element.get(subjectSearchBar)
+				   .then(element.getValue)
+				   .then(function(val) {
+						val.should.strictEqual('');
+						done();
+				   }, done);
+		});
+	});
+
+	describe('element manipulation', function() {
+		xit('should ')
 	});
 });
 
