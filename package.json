@@ -1,7 +1,7 @@
 {
   "name": "wd-element",
   "version": "0.0.1",
-  "description": "An object-oriented wrapper around wd.",
+  "description": "A promises-oriented wrapper around wd.",
   "keywords": "webdriver, selenium, object, promise, promises",
   "homepage": "https://github.com/MattiSG/wd-element/",
   "bugs": "https://github.com/MattiSG/wd-element/issues",
@@ -30,8 +30,6 @@
   },
   "devDependencies": {
     "should": "0.6",
-    "mocha": "1.2",
-    "visionmedia-jscoverage": "1.0"
-  },
-  "private": true
+    "mocha": "1.2"
+  }
 }

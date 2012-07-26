@@ -3,7 +3,7 @@ WebDriver Elements
 
 The [wd](https://github.com/admc/wd#readme) module for Node is a good WebDriver controller. However, its API enforces the classical Node-style callbacks (i.e. pass a callback to each getter, needing to test its first argument for an error…). The dreaded pyramid of callback neural death awaits users.
 
-This module aims at providing an object-oriented, [promises](http://wiki.commonjs.org/wiki/Promises/A)-style abstraction over wd methods.
+This module aims at providing a [promises](http://wiki.commonjs.org/wiki/Promises/A)-style abstraction over wd methods.
 
 The goal is to be able to chain methods and getters this way:
 
@@ -16,12 +16,12 @@ The goal is to be able to chain methods and getters this way:
 		element.use(remoteBrowser);
 
 		element.findByName('q')
-			   .then(element.fill('Toto'))
-			   .then(element.click)
+			   .then(element.type('Toto'))
+			   .then(element.submit)
 			   .then(element.findById('zero_click_heading'))
-			   .then(element.matches('Meanings of Toto'))
-			   .then(function(matches) {
-			   		assert(matches);
+			   .then(element.get('value'))
+			   .then(function(value) {
+			   		assert.equal(value, 'Meanings of Toto');
 			   	}).end();	// needed if we want to throw any exception found along the way instead of writing a specific catcher for it
 	}
 
