@@ -57,7 +57,7 @@ describe('Element', function() {
 				.then(function(elm) {
 					elm.should.equal(subjectSearchBar);
 					done();
-				}, done);
+				}, done).end();
 	});
 
 	describe('retrieval', function() {
@@ -66,7 +66,7 @@ describe('Element', function() {
 				elm.value.should.equal(subjectSearchBar.value);	// can't directly call equal on elm?!
 				elm.browser.should.equal(subjectSearchBar.browser);
 				done();
-			}, done);
+			}, done).end();
 		});
 
 		it('should provide a getter for values', function(done) {
@@ -75,12 +75,13 @@ describe('Element', function() {
 				   .then(function(val) {
 						should(val === '');
 						done();
-				   }, done);
+				   }, done).end();
 		});
 	});
 
 	describe('manipulation', function() {
-		var TYPED = 'Toto';
+		var TYPED = 'toto',
+			TYPED_2 = 'tutu'
 
 		it('should input a value in a field', function(done) {
 			element.wrap(subjectSearchBar)
@@ -89,8 +90,28 @@ describe('Element', function() {
 				   .then(function(val) {
 						should(val === TYPED);
 						done();
-				   }, done);
-		})
+				   }, done).end();
+		});
+
+		it('should not clear the previous value of a field', function(done) {
+			element.wrap(subjectSearchBar)
+				   .then(element.type(TYPED_2))
+				   .then(element.get('value'))
+				   .then(function(val) {
+						should(val === (TYPED + TYPED_2));
+						done();
+				   }, done).end();
+		});
+
+		it('should clear a field', function(done) {
+			element.wrap(subjectSearchBar)
+				   .then(element.clear())
+				   .then(element.get('value'))
+				   .then(function(val) {
+						should(val === '');
+						done();
+				   }, done).end();
+		});
 	});
 });
 

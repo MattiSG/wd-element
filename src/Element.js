@@ -102,19 +102,17 @@ module.exports = new Class( /** @lends Element */ {
 		return this.makePromise('getText');
 	},
 
-	/** Sets the contents of a field passed through a promise chain to the given value.
-	*@param	{String}	input	The value to set the field to.
-	*/
-	input: function input(input) {
-		return	this.makePromise('clear')
-					.then(this.type(input));
-	},
-
 	/** Sends the given keystrokes sequence to an element passed through a promise chain.
 	*@param	{String}	input	The sequence of keystrokes to send.
-	*@see	#input	If you want to set the contents of a field, rather use `input()`, that will clear the contents beforehand.
+	*@see	#clear	If you want to set the contents of a field, make sure that you clear its contents beforehand.
 	*/
 	type: function type(input) {
 		return this.makePromise('type', input);
+	},
+
+	/** Empties the given field.
+	*/
+	clear: function clear() {
+		return this.makePromise('clear');
 	}
 });
